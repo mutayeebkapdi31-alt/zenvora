@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}My Shortlist | Zenvora{% endblock %}
+
+{% block content %}
+
+<section class="dashboard-page">
+
+    <div class="container">
+
+        <div class="dashboard-heading">
+
+            <div>
+
+                <span class="eyebrow">
+                    YOUR COLLECTION
+                </span>
+
+                <h1>
+                    My <span>Shortlist.</span>
+                </h1>
+
+            </div>
+
+            <a href="{{ url_for('properties') }}"
+               class="outline-btn">
+                Explore more →
+            </a>
+
+        </div>
+
+
+        <div class="row g-4">
+
+            {% for item in items %}
+
+            <div class="col-lg-6">
+
+                <div class="shortlist-card">
+
+                    <img src="{{ item.property.image }}">
+
+                    <div>
+
+                        <span class="property-type">
+                            {{ item.property.category }}
+                        </span>
+
+                        <h3>
+                            {{ item.property.title }}
+                        </h3>
+
+                        <p>
+                            📍 {{ item.property.location }}
+                        </p>
+
+                        <strong>
+                            ₹{{ "{:,.0f}".format(item.property.price) }}
+                        </strong>
+
+                        <div class="mt-3">
+
+                            <a href="{{ url_for('property_detail', property_id=item.property.id) }}"
+                               class="btn btn-dark rounded-pill">
+                                View
+                            </a>
+
+                            <a href="{{ url_for('remove_cart', item_id=item.id) }}"
+                               class="btn btn-outline-danger rounded-pill">
+                                Remove
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% else %}
+
+            <div class="empty-state">
+
+                <div>♡</div>
+
+                <h3>
+                    Your shortlist is empty.
+                </h3>
+
+                <p>
+                    Save properties you love and compare them later.
+                </p>
+
+                <a href="{{ url_for('properties') }}"
+                   class="btn btn-primary-custom rounded-pill px-4">
+                    Explore Properties
+                </a>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

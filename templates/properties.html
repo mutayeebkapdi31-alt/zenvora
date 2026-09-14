@@ -1,0 +1,320 @@
+{% extends "base.html" %}
+
+{% block title %}Properties | Zenvora{% endblock %}
+
+{% block content %}
+
+<!-- =====================================================
+     PROPERTIES HEADER
+===================================================== -->
+
+<section class="properties-header">
+
+    <div class="container">
+
+        <span class="eyebrow">
+            ZENVORA COLLECTION
+        </span>
+
+        <h1>
+            Explore exceptional
+            <span>properties.</span>
+        </h1>
+
+        <p>
+            Find a space that matches the way you live.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     PROPERTY SEARCH + FILTERS
+===================================================== -->
+
+<section class="section pt-4">
+
+    <div class="container">
+
+        <form
+            class="filter-bar"
+            method="GET"
+            action="{{ url_for('properties') }}"
+        >
+
+            <!-- SEARCH -->
+
+            <div>
+
+                <label>Search</label>
+
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ search }}"
+                    placeholder="Property name or location"
+                >
+
+            </div>
+
+
+            <!-- PURPOSE -->
+
+            <div>
+
+                <label>Purpose</label>
+
+                <select name="purpose">
+
+                    <option value="">
+                        All
+                    </option>
+
+                    <option
+                        value="Rent"
+                        {% if purpose == "Rent" %}selected{% endif %}
+                    >
+                        Rent
+                    </option>
+
+                    <option
+                        value="Buy"
+                        {% if purpose == "Buy" %}selected{% endif %}
+                    >
+                        Buy
+                    </option>
+
+                    <option
+                        value="Lease"
+                        {% if purpose == "Lease" %}selected{% endif %}
+                    >
+                        Lease
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- CATEGORY -->
+
+            <div>
+
+                <label>Category</label>
+
+                <select name="category">
+
+                    <option value="">
+                        All
+                    </option>
+
+                    <option
+                        value="Apartment"
+                        {% if category == "Apartment" %}selected{% endif %}
+                    >
+                        Apartment
+                    </option>
+
+                    <option
+                        value="Villa"
+                        {% if category == "Villa" %}selected{% endif %}
+                    >
+                        Villa
+                    </option>
+
+                    <option
+                        value="Penthouse"
+                        {% if category == "Penthouse" %}selected{% endif %}
+                    >
+                        Penthouse
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- LOCATION -->
+
+            <div>
+
+                <label>Location</label>
+
+                <input
+                    type="text"
+                    name="location"
+                    value="{{ location }}"
+                    placeholder="Search location"
+                >
+
+            </div>
+
+
+            <!-- BUTTON -->
+
+            <button type="submit">
+                Search Properties
+            </button>
+
+        </form>
+
+
+        <!-- =================================================
+             RESULT COUNT
+        ================================================= -->
+
+        <div class="result-line">
+
+            <span>
+                {{ properties|length }} properties found
+            </span>
+
+            {% if search or category or purpose or location %}
+
+                <a href="{{ url_for('properties') }}">
+                    Clear Filters
+                </a>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- =================================================
+             PROPERTY CARDS
+        ================================================= -->
+
+        <div class="row g-4">
+
+            {% for property in properties %}
+
+            <div class="col-lg-4 col-md-6">
+
+                <div class="property-card">
+
+                    <!-- IMAGE -->
+
+                    <div class="property-image">
+
+                        <img
+                            src="{{ property.image }}"
+                            alt="{{ property.title }}"
+                            onerror="this.src='https://images.unsplash.com/photo-1600607687939-ce8a6c25118c';"
+                        >
+
+                        <span class="purpose-tag">
+                            {{ property.purpose }}
+                        </span>
+
+
+                        <!-- WISHLIST -->
+
+                        <a
+                            href="{{ url_for('wishlist', property_id=property.id) }}"
+                            class="heart-btn"
+                            title="Save property"
+                        >
+                            ♡
+                        </a>
+
+                    </div>
+
+
+                    <!-- PROPERTY INFO -->
+
+                    <div class="property-info">
+
+                        <span class="property-type">
+                            {{ property.category }}
+                        </span>
+
+                        <h3>
+                            {{ property.title }}
+                        </h3>
+
+                        <p class="location">
+                            📍 {{ property.location }}
+                        </p>
+
+
+                        <!-- SPECS -->
+
+                        <div class="property-specs">
+
+                            <span>
+                                🛏 {{ property.bedrooms }}
+                            </span>
+
+                            <span>
+                                ◫ {{ property.area }} sq.ft
+                            </span>
+
+                            <span>
+                                🚿 {{ property.bathrooms }}
+                            </span>
+
+                        </div>
+
+
+                        <!-- PRICE + DETAILS -->
+
+                        <div class="property-bottom">
+
+                            <strong>
+                                ₹{{ "{:,.0f}".format(property.price) }}
+                            </strong>
+
+                            <a
+                                href="{{ url_for('property_detail', property_id=property.id) }}"
+                            >
+                                Details →
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% else %}
+
+            <!-- =================================================
+                 EMPTY STATE
+            ================================================= -->
+
+            <div class="empty-state">
+
+                <div>
+                    ⌂
+                </div>
+
+                <h3>
+                    No properties found
+                </h3>
+
+                <p>
+                    Try changing your search or filters.
+                </p>
+
+                <a
+                    href="{{ url_for('properties') }}"
+                    class="btn btn-primary-custom rounded-pill px-4"
+                >
+                    Reset Search
+                </a>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

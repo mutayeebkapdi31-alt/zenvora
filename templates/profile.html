@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile | Zenvora{% endblock %}
+
+{% block content %}
+
+<section class="dashboard-page">
+
+    <div class="container">
+
+        <div class="profile-header">
+
+            <div class="profile-avatar">
+                {{ user.name[0]|upper }}
+            </div>
+
+            <div>
+
+                <span class="eyebrow">
+                    ZENVORA MEMBER
+                </span>
+
+                <h1>
+                    Hello,
+                    <span>{{ user.name }}</span>
+                </h1>
+
+                <p>
+                    Member since
+                    {{ user.created_at.strftime('%d %B %Y') }}
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="row g-4">
+
+            <div class="col-lg-4">
+
+                <div class="profile-card">
+
+                    <h3>
+                        Personal Details
+                    </h3>
+
+                    <div class="profile-detail">
+                        <span>Name</span>
+                        <strong>{{ user.name }}</strong>
+                    </div>
+
+                    <div class="profile-detail">
+                        <span>Email</span>
+                        <strong>{{ user.email }}</strong>
+                    </div>
+
+                    <div class="profile-detail">
+                        <span>Phone</span>
+                        <strong>{{ user.phone or "Not provided" }}</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-lg-8">
+
+                <div class="profile-card">
+
+                    <div class="d-flex justify-content-between">
+
+                        <h3>
+                            My Inquiries
+                        </h3>
+
+                        <span>
+                            {{ inquiries|length }}
+                        </span>
+
+                    </div>
+
+
+                    {% for inquiry in inquiries %}
+
+                    <div class="inquiry-row">
+
+                        <div>
+
+                            <b>
+                                {{ inquiry.property.title }}
+                            </b>
+
+                            <p>
+                                {{ inquiry.message }}
+                            </p>
+
+                        </div>
+
+                        <span class="status-pill">
+                            {{ inquiry.status }}
+                        </span>
+
+                    </div>
+
+                    {% else %}
+
+                    <p class="muted">
+                        You haven't sent any inquiries yet.
+                    </p>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

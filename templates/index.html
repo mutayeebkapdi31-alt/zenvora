@@ -1,0 +1,407 @@
+{% extends "base.html" %}
+
+{% block title %}
+Zenvora Property Solutions | Find Your Space
+{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+
+    <div class="hero-overlay"></div>
+
+    <div class="container hero-content">
+
+        <div class="hero-badge">
+            ✦ Premium Property Marketplace
+        </div>
+
+        <h1>
+            Find a place
+            <br>
+            <span>worth coming home to.</span>
+        </h1>
+
+        <p>
+            Discover exceptional apartments, villas and
+            penthouses curated by Zenvora Property Solutions.
+        </p>
+
+
+        <form action="{{ url_for('properties') }}"
+              method="GET"
+              class="hero-search">
+
+            <div class="search-item">
+
+                <label>Looking for</label>
+
+                <select name="purpose">
+
+                    <option value="">
+                        Any Purpose
+                    </option>
+
+                    <option value="Rent">
+                        Rent
+                    </option>
+
+                    <option value="Buy">
+                        Buy
+                    </option>
+
+                    <option value="Lease">
+                        Lease
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="search-item">
+
+                <label>Property type</label>
+
+                <select name="category">
+
+                    <option value="">
+                        Any Property
+                    </option>
+
+                    <option value="Apartment">
+                        Apartment
+                    </option>
+
+                    <option value="Villa">
+                        Villa
+                    </option>
+
+                    <option value="Penthouse">
+                        Penthouse
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="search-item">
+
+                <label>Location</label>
+
+                <input type="text"
+                       name="location"
+                       placeholder="Mumbai, Pune, Panvel...">
+
+            </div>
+
+
+            <button class="search-btn">
+
+                Search Properties
+
+                <span>→</span>
+
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="section-heading">
+
+            <div>
+
+                <span class="eyebrow">
+                    EXPLORE
+                </span>
+
+                <h2>
+                    Find your perfect
+                    <span>space.</span>
+                </h2>
+
+            </div>
+
+            <a href="{{ url_for('properties') }}"
+               class="outline-btn">
+                View all properties →
+            </a>
+
+        </div>
+
+
+        <div class="row g-4">
+
+            <div class="col-md-4">
+
+                <a href="{{ url_for('properties', category='Apartment') }}"
+                   class="category-card">
+
+                    <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c">
+
+                    <div>
+                        <small>01</small>
+                        <h3>Apartments</h3>
+                        <span>Explore collection →</span>
+                    </div>
+
+                </a>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <a href="{{ url_for('properties', category='Villa') }}"
+                   class="category-card">
+
+                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c">
+
+                    <div>
+                        <small>02</small>
+                        <h3>Villas</h3>
+                        <span>Explore collection →</span>
+                    </div>
+
+                </a>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <a href="{{ url_for('properties', category='Penthouse') }}"
+                   class="category-card">
+
+                    <img src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154">
+
+                    <div>
+                        <small>03</small>
+                        <h3>Penthouses</h3>
+                        <span>Explore collection →</span>
+                    </div>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="section light-section">
+
+    <div class="container">
+
+        <div class="section-heading">
+
+            <div>
+
+                <span class="eyebrow">
+                    CURATED FOR YOU
+                </span>
+
+                <h2>
+                    Featured
+                    <span>properties.</span>
+                </h2>
+
+            </div>
+
+            <a href="{{ url_for('properties') }}"
+               class="outline-btn">
+                Explore all →
+            </a>
+
+        </div>
+
+
+        <div class="row g-4">
+
+            {% for property in featured %}
+
+            <div class="col-lg-4 col-md-6">
+
+                <div class="property-card">
+
+                    <div class="property-image">
+
+                        <img src="{{ property.image }}"
+                             alt="{{ property.title }}">
+
+                        <span class="purpose-tag">
+                            {{ property.purpose }}
+                        </span>
+
+                        <a href="{{ url_for('wishlist', property_id=property.id) }}"
+                           class="heart-btn">
+                            ♡
+                        </a>
+
+                    </div>
+
+
+                    <div class="property-info">
+
+                        <span class="property-type">
+                            {{ property.category }}
+                        </span>
+
+                        <h3>
+                            {{ property.title }}
+                        </h3>
+
+                        <p class="location">
+                            📍 {{ property.location }}
+                        </p>
+
+
+                        <div class="property-specs">
+
+                            <span>
+                                🛏 {{ property.bedrooms }}
+                            </span>
+
+                            <span>
+                                ◫ {{ property.area }} sq.ft
+                            </span>
+
+                            <span>
+                                🚿 {{ property.bathrooms }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="property-bottom">
+
+                            <strong>
+                                ₹{{ "{:,.0f}".format(property.price) }}
+                            </strong>
+
+                            <a href="{{ url_for('property_detail', property_id=property.id) }}">
+                                View →
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="stats-section">
+
+    <div class="container">
+
+        <div class="row text-center g-4">
+
+            <div class="col-md-3">
+                <strong>500+</strong>
+                <span>Properties</span>
+            </div>
+
+            <div class="col-md-3">
+                <strong>1200+</strong>
+                <span>Happy Clients</span>
+            </div>
+
+            <div class="col-md-3">
+                <strong>15+</strong>
+                <span>Premium Locations</span>
+            </div>
+
+            <div class="col-md-3">
+                <strong>98%</strong>
+                <span>Client Satisfaction</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="split-banner">
+
+            <div>
+
+                <span class="eyebrow">
+                    ZENVORA ADVANTAGE
+                </span>
+
+                <h2>
+                    Property decisions,
+                    <br>
+                    made <span>simpler.</span>
+                </h2>
+
+                <p>
+                    From discovering the right property to
+                    completing your deal, Zenvora brings the
+                    entire property journey together.
+                </p>
+
+                <a href="{{ url_for('properties') }}"
+                   class="btn btn-primary-custom rounded-pill px-4">
+                    Start Exploring
+                </a>
+
+            </div>
+
+            <div class="advantage-list">
+
+                <div>
+                    <span>01</span>
+                    <b>Verified Listings</b>
+                    <p>Curated property listings.</p>
+                </div>
+
+                <div>
+                    <span>02</span>
+                    <b>Smart Discovery</b>
+                    <p>Find spaces based on your purpose.</p>
+                </div>
+
+                <div>
+                    <span>03</span>
+                    <b>Dedicated Support</b>
+                    <p>Get assistance throughout your journey.</p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,451 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ property.title }} | Zenvora Property Solutions
+{% endblock %}
+
+{% block content %}
+
+<!-- =====================================================
+     PROPERTY DETAIL
+===================================================== -->
+
+<section class="detail-page">
+
+    <div class="container">
+
+
+        <!-- =================================================
+             PROPERTY IMAGE
+        ================================================= -->
+
+        <div class="detail-image">
+
+            <img
+                src="{{ property.image }}"
+                alt="{{ property.title }}"
+                onerror="this.src='https://images.unsplash.com/photo-1600607687939-ce8a6c25118c';"
+            >
+
+            <span class="detail-purpose">
+                {{ property.purpose }}
+            </span>
+
+        </div>
+
+
+        <!-- =================================================
+             PROPERTY INFORMATION
+        ================================================= -->
+
+        <div class="detail-content">
+
+            <div class="row g-5">
+
+
+                <!-- =================================================
+                     LEFT SIDE
+                ================================================= -->
+
+                <div class="col-lg-8">
+
+                    <span class="property-type">
+                        {{ property.category }}
+                    </span>
+
+                    <h1>
+                        {{ property.title }}
+                    </h1>
+
+                    <p class="detail-location">
+                        📍 {{ property.location }}
+                    </p>
+
+
+                    <!-- PROPERTY SPECS -->
+
+                    <div class="detail-spec-grid">
+
+                        <div>
+
+                            <span>
+                                Bedrooms
+                            </span>
+
+                            <strong>
+                                {{ property.bedrooms }}
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Bathrooms
+                            </span>
+
+                            <strong>
+                                {{ property.bathrooms }}
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Area
+                            </span>
+
+                            <strong>
+                                {{ property.area }} sq.ft
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Status
+                            </span>
+
+                            <strong>
+                                {{ property.status }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- DESCRIPTION -->
+
+                    <h3 class="detail-heading">
+                        About this property
+                    </h3>
+
+                    <p class="detail-description">
+                        {{ property.description }}
+                    </p>
+
+
+                    <!-- EXTRA INFORMATION -->
+
+                    <div class="property-extra-info">
+
+                        <div>
+
+                            <span>
+                                Property Type
+                            </span>
+
+                            <strong>
+                                {{ property.category }}
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Purpose
+                            </span>
+
+                            <strong>
+                                {{ property.purpose }}
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Listing Status
+                            </span>
+
+                            <strong>
+                                {{ property.status }}
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Property ID
+                            </span>
+
+                            <strong>
+                                ZENV-{{ property.id }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     RIGHT SIDE
+                ================================================= -->
+
+                <div class="col-lg-4">
+
+                    <div class="price-box">
+
+                        <small>
+                            {{ property.purpose }} Price
+                        </small>
+
+                        <h2>
+                            ₹{{ "{:,.0f}".format(property.price) }}
+                        </h2>
+
+
+                        {% if property.purpose == "Rent" %}
+
+                            <span>
+                                Per Month
+                            </span>
+
+                        {% elif property.purpose == "Lease" %}
+
+                            <span>
+                                Lease Price
+                            </span>
+
+                        {% else %}
+
+                            <span>
+                                Total Property Price
+                            </span>
+
+                        {% endif %}
+
+
+                        <!-- SHORTLIST -->
+
+                        <a
+                            href="{{ url_for('add_cart', property_id=property.id) }}"
+                            class="detail-btn"
+                        >
+                            ♡ Add to Shortlist
+                        </a>
+
+
+                        <!-- WISHLIST -->
+
+                        <a
+                            href="{{ url_for('wishlist', property_id=property.id) }}"
+                            class="detail-outline"
+                        >
+                            ♥ Save Property
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 INQUIRY
+            ================================================= -->
+
+            <div class="inquiry-box">
+
+                <span class="eyebrow">
+                    INTERESTED?
+                </span>
+
+                <h3>
+                    Talk to Zenvora
+                </h3>
+
+                <p>
+                    Send us your requirements and our property
+                    team will get back to you.
+                </p>
+
+
+                <form
+                    method="POST"
+                    action="{{ url_for('inquiry', property_id=property.id) }}"
+                >
+
+                    <textarea
+                        name="message"
+                        rows="5"
+                        placeholder="Write your message..."
+                        required
+                    >I am interested in {{ property.title }}. Please provide me with more information.</textarea>
+
+
+                    <button
+                        type="submit"
+                        class="auth-btn"
+                    >
+                        Send Inquiry →
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <!-- =================================================
+                 SIMILAR PROPERTIES
+            ================================================= -->
+
+            {% if similar_properties %}
+
+            <section class="similar-properties">
+
+                <div class="similar-header">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            EXPLORE MORE
+                        </span>
+
+                        <h2>
+                            You may also like
+                        </h2>
+
+                    </div>
+
+                    <a
+                        href="{{ url_for('properties') }}"
+                        class="similar-view-all"
+                    >
+                        View all →
+                    </a>
+
+                </div>
+
+
+                <div class="row g-4">
+
+                    {% for item in similar_properties %}
+
+                    <div class="col-lg-4 col-md-6">
+
+                        <div class="property-card">
+
+                            <!-- IMAGE -->
+
+                            <div class="property-image">
+
+                                <img
+                                    src="{{ item.image }}"
+                                    alt="{{ item.title }}"
+                                    onerror="this.src='https://images.unsplash.com/photo-1600607687939-ce8a6c25118c';"
+                                >
+
+                                <span class="purpose-tag">
+                                    {{ item.purpose }}
+                                </span>
+
+                            </div>
+
+
+                            <!-- INFO -->
+
+                            <div class="property-info">
+
+                                <span class="property-type">
+                                    {{ item.category }}
+                                </span>
+
+                                <h3>
+                                    {{ item.title }}
+                                </h3>
+
+                                <p class="location">
+                                    📍 {{ item.location }}
+                                </p>
+
+
+                                <div class="property-specs">
+
+                                    <span>
+                                        🛏 {{ item.bedrooms }}
+                                    </span>
+
+                                    <span>
+                                        ◫ {{ item.area }} sq.ft
+                                    </span>
+
+                                    <span>
+                                        🚿 {{ item.bathrooms }}
+                                    </span>
+
+                                </div>
+
+
+                                <div class="property-bottom">
+
+                                    <strong>
+                                        ₹{{ "{:,.0f}".format(item.price) }}
+                                    </strong>
+
+                                    <a
+                                        href="{{ url_for('property_detail', property_id=item.id) }}"
+                                    >
+                                        Details →
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </section>
+
+            {% endif %}
+
+
+            <!-- =================================================
+                 BACK BUTTONS
+            ================================================= -->
+
+            <div class="detail-back">
+
+                <a
+                    href="{{ url_for('properties') }}"
+                    class="btn btn-outline-dark rounded-pill px-4"
+                >
+                    ← Back to Properties
+                </a>
+
+                <a
+                    href="{{ url_for('index') }}"
+                    class="btn btn-primary-custom rounded-pill px-4 ms-2"
+                >
+                    Back to Home
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

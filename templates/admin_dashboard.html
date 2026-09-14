@@ -1,0 +1,939 @@
+{% extends "base.html" %}
+
+{% block title %}
+Zenvora Admin Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-page">
+
+    <div class="container-fluid px-lg-5">
+
+        <div class="admin-topbar">
+
+            <div>
+
+                <span class="eyebrow">
+                    ZENVORA MANAGEMENT
+                </span>
+
+                <h1>
+                    Good day,
+                    <span>{{ session.get('admin_username') }}</span>
+                </h1>
+
+            </div>
+
+            <a href="{{ url_for('admin_logout') }}"
+               class="btn btn-dark rounded-pill px-4">
+                Logout
+            </a>
+
+        </div>
+
+
+        <!-- KPI CARDS -->
+
+        <div class="row g-3 mb-5">
+
+            <div class="col-xl-2 col-md-4 col-6">
+
+                <div class="kpi-card">
+
+                    <span>Users</span>
+
+                    <strong>
+                        {{ total_users }}
+                    </strong>
+
+                    <small>
+                        Registered users
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-xl-2 col-md-4 col-6">
+
+                <div class="kpi-card">
+
+                    <span>Properties</span>
+
+                    <strong>
+                        {{ total_properties }}
+                    </strong>
+
+                    <small>
+                        Total listings
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-xl-2 col-md-4 col-6">
+
+                <div class="kpi-card">
+
+                    <span>Available</span>
+
+                    <strong>
+                        {{ available_properties }}
+                    </strong>
+
+                    <small>
+                        Active listings
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-xl-2 col-md-4 col-6">
+
+                <div class="kpi-card">
+
+                    <span>Inquiries</span>
+
+                    <strong>
+                        {{ total_inquiries }}
+                    </strong>
+
+                    <small>
+                        Leads generated
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-xl-2 col-md-4 col-6">
+
+                <div class="kpi-card">
+
+                    <span>Deals</span>
+
+                    <strong>
+                        {{ total_deals }}
+                    </strong>
+
+                    <small>
+                        Completed deals
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-xl-2 col-md-4 col-6">
+
+                <div class="kpi-card accent-kpi">
+
+                    <span>Revenue</span>
+
+                    <strong>
+                        ₹{{ "{:,.0f}".format(total_revenue or 0) }}
+                    </strong>
+
+                    <small>
+                        Deal revenue
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- MARKETING ANALYTICS -->
+
+        <div class="row g-4 mb-5">
+
+            <div class="col-lg-7">
+
+                <div class="admin-card">
+
+                    <div class="admin-card-heading">
+
+                        <div>
+
+                            <span class="eyebrow">
+                                MARKETING
+                            </span>
+
+                            <h3>
+                                Property demand
+                            </h3>
+
+                        </div>
+
+                        <span class="live-dot">
+                            ● Live
+                        </span>
+
+                    </div>
+
+
+                    <div class="bar-chart">
+
+                        <div class="bar-row">
+
+                            <span>
+                                Rent
+                            </span>
+
+                            <div class="bar">
+
+                                <i style="width: {{ (rent_count * 100 / (rent_count + buy_count + lease_count)) if (rent_count + buy_count + lease_count) else 0 }}%"></i>
+
+                            </div>
+
+                            <b>
+                                {{ rent_count }}
+                            </b>
+
+                        </div>
+
+
+                        <div class="bar-row">
+
+                            <span>
+                                Buy
+                            </span>
+
+                            <div class="bar">
+
+                                <i style="width: {{ (buy_count * 100 / (rent_count + buy_count + lease_count)) if (rent_count + buy_count + lease_count) else 0 }}%"></i>
+
+                            </div>
+
+                            <b>
+                                {{ buy_count }}
+                            </b>
+
+                        </div>
+
+
+                        <div class="bar-row">
+
+                            <span>
+                                Lease
+                            </span>
+
+                            <div class="bar">
+
+                                <i style="width: {{ (lease_count * 100 / (rent_count + buy_count + lease_count)) if (rent_count + buy_count + lease_count) else 0 }}%"></i>
+
+                            </div>
+
+                            <b>
+                                {{ lease_count }}
+                            </b>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-lg-5">
+
+                <div class="admin-card">
+
+                    <div class="admin-card-heading">
+
+                        <div>
+
+                            <span class="eyebrow">
+                                INVENTORY
+                            </span>
+
+                            <h3>
+                                Property mix
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="donut-stats">
+
+                        <div>
+                            <strong>
+                                {{ apartment_count }}
+                            </strong>
+                            <span>
+                                Apartments
+                            </span>
+                        </div>
+
+                        <div>
+                            <strong>
+                                {{ villa_count }}
+                            </strong>
+                            <span>
+                                Villas
+                            </span>
+                        </div>
+
+                        <div>
+                            <strong>
+                                {{ penthouse_count }}
+                            </strong>
+                            <span>
+                                Penthouses
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ADD PROPERTY -->
+
+        <div class="admin-card mb-5">
+
+            <div class="admin-card-heading">
+
+                <div>
+
+                    <span class="eyebrow">
+                        INVENTORY MANAGEMENT
+                    </span>
+
+                    <h3>
+                        List a new property
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <form method="POST"
+                  action="{{ url_for('add_property') }}">
+
+                <div class="row g-3">
+
+                    <div class="col-lg-6">
+
+                        <label>Property Title</label>
+
+                        <input name="title"
+                               placeholder="Luxury Sea View Apartment"
+                               required>
+
+                    </div>
+
+
+                    <div class="col-lg-6">
+
+                        <label>Location</label>
+
+                        <input name="location"
+                               placeholder="Mumbai, Maharashtra"
+                               required>
+
+                    </div>
+
+
+                    <div class="col-md-3">
+
+                        <label>Category</label>
+
+                        <select name="category">
+
+                            <option>
+                                Apartment
+                            </option>
+
+                            <option>
+                                Villa
+                            </option>
+
+                            <option>
+                                Penthouse
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="col-md-3">
+
+                        <label>Purpose</label>
+
+                        <select name="purpose">
+
+                            <option>
+                                Rent
+                            </option>
+
+                            <option>
+                                Buy
+                            </option>
+
+                            <option>
+                                Lease
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="col-md-3">
+
+                        <label>Price</label>
+
+                        <input type="number"
+                               name="price"
+                               placeholder="15000000"
+                               required>
+
+                    </div>
+
+
+                    <div class="col-md-3">
+
+                        <label>Area sq.ft</label>
+
+                        <input type="number"
+                               name="area"
+                               placeholder="2000">
+
+                    </div>
+
+
+                    <div class="col-md-3">
+
+                        <label>Bedrooms</label>
+
+                        <input type="number"
+                               name="bedrooms"
+                               value="2">
+
+                    </div>
+
+
+                    <div class="col-md-3">
+
+                        <label>Bathrooms</label>
+
+                        <input type="number"
+                               name="bathrooms"
+                               value="2">
+
+                    </div>
+
+
+                    <div class="col-lg-6">
+
+                        <label>Image URL</label>
+
+                        <input name="image"
+                               placeholder="https://...">
+
+                    </div>
+
+
+                    <div class="col-12">
+
+                        <label>Description</label>
+
+                        <textarea name="description"
+                                  rows="4"
+                                  placeholder="Describe the property..."></textarea>
+
+                    </div>
+
+
+                    <div class="col-12">
+
+                        <label class="check-label">
+
+                            <input type="checkbox"
+                                   name="featured">
+
+                            Feature this property on the homepage
+
+                        </label>
+
+                    </div>
+
+
+                    <div>
+
+                        <button class="admin-action">
+                            + Publish Property
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <!-- PROPERTIES -->
+
+        <div class="admin-card mb-5">
+
+            <div class="admin-card-heading">
+
+                <div>
+
+                    <span class="eyebrow">
+                        LISTINGS
+                    </span>
+
+                    <h3>
+                        Property inventory
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="table-responsive">
+
+                <table class="admin-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Property</th>
+                            <th>Category</th>
+                            <th>Purpose</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for property in properties %}
+
+                        <tr>
+
+                            <td>
+
+                                <div class="table-property">
+
+                                    <img src="{{ property.image or url_for('static', filename='images/property-placeholder.jpg') }}" alt="{{ property.title }}">
+
+                                    <span>
+                                        {{ property.title }}
+                                        <small>
+                                            {{ property.location }}
+                                        </small>
+                                    </span>
+
+                                </div>
+
+                            </td>
+
+                            <td>
+                                {{ property.category }}
+                            </td>
+
+                            <td>
+                                {{ property.purpose }}
+                            </td>
+
+                            <td>
+                                ₹{{ "{:,.0f}".format(property.price or 0) }}
+                            </td>
+
+                            <td>
+
+                                <form method="POST"
+                                      action="{{ url_for('update_property_status', property_id=property.id) }}">
+
+                                    <select name="status"
+                                            onchange="this.form.submit()">
+
+                                        <option
+                                            {% if property.status == 'Available' %}selected{% endif %}>
+                                            Available
+                                        </option>
+
+                                        <option
+                                            {% if property.status == 'Sold' %}selected{% endif %}>
+                                            Sold
+                                        </option>
+
+                                        <option
+                                            {% if property.status == 'Reserved' %}selected{% endif %}>
+                                            Reserved
+                                        </option>
+
+                                    </select>
+
+                                </form>
+
+                            </td>
+
+                            <td>
+
+                                <a href="{{ url_for('delete_property', property_id=property.id) }}"
+                                   onclick="return confirm('Delete this property?')"
+                                   class="delete-btn">
+                                    Delete
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- DEAL MANAGEMENT -->
+
+        <div class="row g-4 mb-5">
+
+            <div class="col-lg-5">
+
+                <div class="admin-card">
+
+                    <span class="eyebrow">
+                        SALES
+                    </span>
+
+                    <h3>
+                        Record completed deal
+                    </h3>
+
+                    <form method="POST"
+                          action="{{ url_for('add_deal') }}">
+
+                        <label>User</label>
+
+                        <select name="user_id"
+                                required>
+
+                            {% for user in users %}
+
+                            <option value="{{ user.id }}">
+                                {{ user.name }} — {{ user.email }}
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+
+                        <label>Property</label>
+
+                        <select name="property_id"
+                                required>
+
+                            {% for property in properties %}
+
+                            <option value="{{ property.id }}">
+                                {{ property.title }}
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+
+                        <label>Deal Amount</label>
+
+                        <input type="number"
+                               name="amount"
+                               placeholder="5000000"
+                               required>
+
+
+                        <button class="admin-action">
+                            Record Deal
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-lg-7">
+
+                <div class="admin-card">
+
+                    <span class="eyebrow">
+                        COMPLETED DEALS
+                    </span>
+
+                    <h3>
+                        Revenue activity
+                    </h3>
+
+
+                    <div class="deal-list">
+
+                        {% for deal in deals %}
+
+                        <div class="deal-row">
+
+                            <div>
+
+                                <b>
+                                    {{ deal.property.title }}
+                                </b>
+
+                                <span>
+                                    {{ deal.user.name }}
+                                </span>
+
+                            </div>
+
+                            <strong>
+                                ₹{{ "{:,.0f}".format(deal.amount or 0) }}
+                            </strong>
+
+                        </div>
+
+                        {% else %}
+
+                        <p class="muted">
+                            No deals recorded yet.
+                        </p>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- USERS -->
+
+        <div class="admin-card mb-5">
+
+            <div class="admin-card-heading">
+
+                <div>
+
+                    <span class="eyebrow">
+                        CRM
+                    </span>
+
+                    <h3>
+                        Registered users
+                    </h3>
+
+                </div>
+
+                <span>
+                    {{ users|length }} users
+                </span>
+
+            </div>
+
+
+            <div class="table-responsive">
+
+                <table class="admin-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Joined</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for user in users %}
+
+                        <tr>
+
+                            <td>
+                                <b>
+                                    {{ user.name }}
+                                </b>
+                            </td>
+
+                            <td>
+                                {{ user.email }}
+                            </td>
+
+                            <td>
+                                {{ user.phone or "-" }}
+                            </td>
+
+                            <td>
+                                {{ user.created_at.strftime('%d %b %Y') if user.created_at else '-' }}
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- INQUIRIES -->
+
+        <div class="admin-card mb-5">
+
+            <div class="admin-card-heading">
+
+                <div>
+
+                    <span class="eyebrow">
+                        LEAD MANAGEMENT
+                    </span>
+
+                    <h3>
+                        Property inquiries
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="table-responsive">
+
+                <table class="admin-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>User</th>
+                            <th>Property</th>
+                            <th>Message</th>
+                            <th>Status</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for inquiry in inquiries %}
+
+                        <tr>
+
+                            <td>
+                                {{ inquiry.user.name }}
+                            </td>
+
+                            <td>
+                                {{ inquiry.property.title }}
+                            </td>
+
+                            <td>
+                                {{ inquiry.message }}
+                            </td>
+
+                            <td>
+
+                                <form method="POST"
+                                      action="{{ url_for('update_inquiry', inquiry_id=inquiry.id) }}">
+
+                                    <select name="status"
+                                            onchange="this.form.submit()">
+
+                                        <option
+                                            {% if inquiry.status == 'Pending' %}selected{% endif %}>
+                                            Pending
+                                        </option>
+
+                                        <option
+                                            {% if inquiry.status == 'Contacted' %}selected{% endif %}>
+                                            Contacted
+                                        </option>
+
+                                        <option
+                                            {% if inquiry.status == 'Closed' %}selected{% endif %}>
+                                            Closed
+                                        </option>
+
+                                    </select>
+
+                                </form>
+
+                            </td>
+
+                        </tr>
+
+                        {% else %}
+
+                        <tr>
+
+                            <td colspan="4">
+                                No inquiries yet.
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

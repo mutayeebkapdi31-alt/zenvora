@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Portal | Zenvora{% endblock %}
+
+{% block content %}
+
+<div class="admin-auth">
+
+    <div class="admin-login-box">
+
+        <div class="admin-symbol">
+            Z
+        </div>
+
+        <span class="eyebrow">
+            ZENVORA MANAGEMENT
+        </span>
+
+        <h1>
+            Admin
+            <span>Portal.</span>
+        </h1>
+
+        <p>
+            Manage properties, users, inquiries and
+            business performance.
+        </p>
+
+
+        <form method="POST">
+
+            <label>Admin Username</label>
+
+            <input type="text"
+                   name="username"
+                   placeholder="admin"
+                   required>
+
+
+            <label>Password</label>
+
+            <input type="password"
+                   name="password"
+                   placeholder="••••••••"
+                   required>
+
+
+            <button class="auth-btn">
+                Enter Dashboard →
+            </button>
+
+        </form>
+
+
+        <a href="{{ url_for('login') }}"
+           class="admin-link">
+            ← Back to User Login
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}
