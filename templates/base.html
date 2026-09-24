@@ -1,140 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Zenvora Property Solutions{% endblock %}</title>
 
-    <title>
-        {% block title %}Zenvora Property Solutions{% endblock %}
-    </title>
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
 
-    <link rel="preconnect"
-          href="https://fonts.googleapis.com">
+    <!-- Bootstrap Icons -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <link rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossorigin>
+    <!-- Zenvora CSS -->
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}">
 
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
-          rel="stylesheet">
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-          rel="stylesheet">
-
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
-
+    {% block extra_css %}{% endblock %}
 </head>
 
 <body>
 
-<nav class="navbar navbar-expand-lg fixed-top zenvora-nav">
+<!-- ================= NAVBAR ================= -->
 
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
     <div class="container">
 
-        <a class="navbar-brand"
-           href="{{ url_for('index') }}">
+        <!-- Logo -->
+        <a class="navbar-brand fw-bold d-flex align-items-center"
+           href="{{ url_for('home') }}">
 
-            <span class="brand-mark">Z</span>
+            <span class="brand-icon">
+                <i class="bi bi-buildings-fill"></i>
+            </span>
 
-            <span>
+            <span class="brand-text">
                 Zenvora
-                <small>Property Solutions</small>
             </span>
 
         </a>
 
-        <button class="navbar-toggler"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarNav">
+        <!-- MOBILE 3-LINE BUTTON -->
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#mainNavbar"
+            aria-controls="mainNavbar"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
 
             <span class="navbar-toggler-icon"></span>
 
         </button>
 
-        <div class="collapse navbar-collapse"
-             id="navbarNav">
+        <!-- NAVIGATION -->
+        <div class="collapse navbar-collapse" id="mainNavbar">
 
             <ul class="navbar-nav ms-auto align-items-lg-center">
 
+                <!-- Home -->
                 <li class="nav-item">
                     <a class="nav-link"
-                       href="{{ url_for('index') }}">
+                       href="{{ url_for('home') }}">
+                        <i class="bi bi-house-door me-1"></i>
                         Home
                     </a>
                 </li>
 
+                <!-- Properties -->
                 <li class="nav-item">
                     <a class="nav-link"
                        href="{{ url_for('properties') }}">
+                        <i class="bi bi-building me-1"></i>
                         Properties
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link"
-                       href="{{ url_for('properties', category='Apartment') }}">
-                        Apartments
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link"
-                       href="{{ url_for('properties', category='Villa') }}">
-                        Villas
                     </a>
                 </li>
 
                 {% if session.get('user_id') %}
 
+                <!-- Wishlist -->
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="{{ url_for('wishlist') }}">
+                        <i class="bi bi-heart me-1"></i>
+                        Wishlist
+
+                        {% if wishlist_count and wishlist_count > 0 %}
+                            <span class="badge rounded-pill bg-danger">
+                                {{ wishlist_count }}
+                            </span>
+                        {% endif %}
+                    </a>
+                </li>
+
+                <!-- Shortlist / Cart -->
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="{{ url_for('cart') }}">
+                        <i class="bi bi-bookmark me-1"></i>
+                        Shortlist
+
+                        {% if cart_count and cart_count > 0 %}
+                            <span class="badge rounded-pill bg-primary">
+                                {{ cart_count }}
+                            </span>
+                        {% endif %}
+                    </a>
+                </li>
+
+                <!-- Profile -->
                 <li class="nav-item">
                     <a class="nav-link"
                        href="{{ url_for('profile') }}">
+                        <i class="bi bi-person-circle me-1"></i>
                         Profile
                     </a>
                 </li>
 
-                <li class="nav-item">
-
-                    <a class="nav-link"
-                       href="{{ url_for('cart') }}">
-
-                        Shortlist
-
-                        {% if cart_count > 0 %}
-                        <span class="nav-badge">
-                            {{ cart_count }}
-                        </span>
-                        {% endif %}
-
-                    </a>
-
-                </li>
-
-                <li class="nav-item">
-                    <a class="btn btn-dark rounded-pill px-4 ms-lg-2"
+                <!-- Logout -->
+                <li class="nav-item ms-lg-2">
+                    <a class="btn btn-outline-danger btn-sm px-3"
                        href="{{ url_for('logout') }}">
+                        <i class="bi bi-box-arrow-right me-1"></i>
                         Logout
                     </a>
                 </li>
 
                 {% else %}
 
+                <!-- Login -->
                 <li class="nav-item">
                     <a class="nav-link"
                        href="{{ url_for('login') }}">
+                        <i class="bi bi-box-arrow-in-right me-1"></i>
                         Login
                     </a>
                 </li>
 
-                <li class="nav-item">
-                    <a class="btn btn-primary-custom rounded-pill px-4 ms-lg-2"
+                <!-- Register -->
+                <li class="nav-item ms-lg-2">
+                    <a class="btn btn-primary btn-sm px-3"
                        href="{{ url_for('register') }}">
-                        Get Started
+                        <i class="bi bi-person-plus me-1"></i>
+                        Register
                     </a>
                 </li>
 
@@ -145,119 +159,173 @@
         </div>
 
     </div>
-
 </nav>
 
 
-<div class="page-space"></div>
+<!-- ================= FLASH MESSAGES ================= -->
 
+<div class="container mt-3">
 
-{% with messages = get_flashed_messages(with_categories=true) %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
 
-{% if messages %}
+        {% if messages %}
 
-<div class="container flash-container">
+            {% for category, message in messages %}
 
-    {% for category, message in messages %}
+                <div
+                    class="alert
+                    {% if category == 'error' %}
+                        alert-danger
+                    {% elif category == 'success' %}
+                        alert-success
+                    {% elif category == 'warning' %}
+                        alert-warning
+                    {% else %}
+                        alert-info
+                    {% endif %}
+                    alert-dismissible fade show"
+                    role="alert">
 
-    <div class="alert alert-{{ category }} alert-dismissible fade show">
+                    <i class="
+                        {% if category == 'success' %}
+                            bi bi-check-circle
+                        {% elif category == 'error' %}
+                            bi bi-exclamation-triangle
+                        {% elif category == 'warning' %}
+                            bi bi-exclamation-circle
+                        {% else %}
+                            bi bi-info-circle
+                        {% endif %}
+                        me-2">
+                    </i>
 
-        {{ message }}
+                    {{ message }}
 
-        <button type="button"
-                class="btn-close"
-                data-bs-dismiss="alert"></button>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Close">
+                    </button>
 
-    </div>
+                </div>
 
-    {% endfor %}
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
 
 </div>
 
-{% endif %}
 
-{% endwith %}
+<!-- ================= MAIN CONTENT ================= -->
+
+<main>
+
+    {% block content %}
+    {% endblock %}
+
+</main>
 
 
-{% block content %}
-{% endblock %}
+<!-- ================= FOOTER ================= -->
 
+<footer class="zenvora-footer mt-5">
 
-<footer class="zenvora-footer">
+    <div class="container py-5">
 
-    <div class="container">
+        <div class="row g-4">
 
-        <div class="row g-5">
+            <!-- Brand -->
+            <div class="col-lg-5 col-md-6">
 
-            <div class="col-lg-5">
-
-                <div class="footer-brand">
-                    <span class="brand-mark">Z</span>
+                <h4 class="fw-bold mb-3">
+                    <i class="bi bi-buildings-fill me-2"></i>
                     Zenvora
-                </div>
+                </h4>
 
-                <p>
-                    Premium property solutions for people
-                    looking to rent, buy or lease exceptional
-                    spaces.
+                <p class="mb-0">
+                    Find a place that feels like home.
+                    Explore apartments, villas and penthouses
+                    for buying, renting and leasing.
                 </p>
 
             </div>
 
-            <div class="col-lg-2">
 
-                <h6>Explore</h6>
+            <!-- Quick Links -->
+            <div class="col-lg-3 col-md-3">
 
-                <a href="{{ url_for('properties') }}">
-                    Properties
-                </a>
+                <h6 class="fw-bold mb-3">
+                    Quick Links
+                </h6>
 
-                <a href="{{ url_for('properties', category='Apartment') }}">
-                    Apartments
-                </a>
+                <ul class="list-unstyled">
 
-                <a href="{{ url_for('properties', category='Villa') }}">
-                    Villas
-                </a>
+                    <li class="mb-2">
+                        <a href="{{ url_for('home') }}">
+                            Home
+                        </a>
+                    </li>
 
-                <a href="{{ url_for('properties', category='Penthouse') }}">
-                    Penthouses
-                </a>
+                    <li class="mb-2">
+                        <a href="{{ url_for('properties') }}">
+                            Properties
+                        </a>
+                    </li>
+
+                    {% if session.get('user_id') %}
+
+                    <li class="mb-2">
+                        <a href="{{ url_for('wishlist') }}">
+                            Wishlist
+                        </a>
+                    </li>
+
+                    <li class="mb-2">
+                        <a href="{{ url_for('profile') }}">
+                            Profile
+                        </a>
+                    </li>
+
+                    {% endif %}
+
+                </ul>
 
             </div>
 
-            <div class="col-lg-2">
 
-                <h6>Purpose</h6>
+            <!-- Contact -->
+            <div class="col-lg-4 col-md-3">
 
-                <a href="{{ url_for('properties', purpose='Rent') }}">
-                    Rent
-                </a>
+                <h6 class="fw-bold mb-3">
+                    Contact
+                </h6>
 
-                <a href="{{ url_for('properties', purpose='Buy') }}">
-                    Buy
-                </a>
+                <p class="mb-2">
+                    <i class="bi bi-envelope me-2"></i>
+                    support@zenvora.com
+                </p>
 
-                <a href="{{ url_for('properties', purpose='Lease') }}">
-                    Lease
-                </a>
+                <p class="mb-2">
+                    <i class="bi bi-telephone me-2"></i>
+                    +91 98765 43210
+                </p>
 
-            </div>
-
-            <div class="col-lg-3">
-
-                <h6>Admin</h6>
-
-                <a href="{{ url_for('admin_login') }}">
-                    Admin Portal
-                </a>
-
-                <p class="mt-3">
-                    © 2026 Zenvora Property Solutions
+                <p class="mb-0">
+                    <i class="bi bi-geo-alt me-2"></i>
+                    Navi Mumbai, Maharashtra
                 </p>
 
             </div>
 
+        </div>
+
+        <hr class="my-4">
+
+        <div class="text-center small">
+            © 2026 Zenvora Property Solutions. All rights reserved.
         </div>
 
     </div>
@@ -265,10 +333,37 @@
 </footer>
 
 
+<!-- ================= BOOTSTRAP JAVASCRIPT ================= -->
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+<!-- ================= NAVBAR MOBILE FIX ================= -->
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const navbar = document.getElementById("mainNavbar");
+
+    const toggler = document.querySelector(".navbar-toggler");
+
+    if (navbar && toggler) {
+
+        navbar.addEventListener("shown.bs.collapse", function () {
+            toggler.setAttribute("aria-expanded", "true");
+        });
+
+        navbar.addEventListener("hidden.bs.collapse", function () {
+            toggler.setAttribute("aria-expanded", "false");
+        });
+
+    }
+
+});
+</script>
+
+
+{% block extra_js %}{% endblock %}
 
 </body>
-
 </html>

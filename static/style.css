@@ -2427,3 +2427,55 @@ font-size: 14px;
     }
 
 }
+/* ================= MOBILE NAVBAR ================= */
+
+@media (max-width: 991px) {
+
+    .navbar {
+        padding: 12px 0;
+    }
+
+    .navbar-collapse {
+        margin-top: 12px;
+        padding: 12px;
+        background: #ffffff;
+        border-radius: 14px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.10);
+    }
+
+    .navbar-nav {
+        width: 100%;
+    }
+
+    .navbar-nav .nav-item {
+        width: 100%;
+    }
+
+    .navbar-nav .nav-link {
+        display: block;
+        width: 100%;
+        padding: 12px 10px;
+        border-radius: 8px;
+    }
+
+    .navbar-nav .nav-link:hover {
+        background: #f1f5f9;
+    }
+
+    .navbar-nav .btn {
+        margin-top: 6px;
+        margin-left: 0 !important;
+        width: 100%;
+    }
+
+    .navbar-toggler {
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 7px 9px;
+    }
+
+    .navbar-toggler:focus {
+        box-shadow: none;
+    }
+
+}
