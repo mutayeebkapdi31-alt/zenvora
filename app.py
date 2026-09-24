@@ -384,11 +384,22 @@ def create_database():
             "admin123"
         )
 
-        existing_admin = Admin.query.filter_by(
-            username=admin_username
-        ).first()
+        existing_admin = Admin.query.first()
 
-        if not existing_admin:
+        if existing_admin:
+
+            # Keep the existing admin account but reset its
+            # username and password from the environment/defaults.
+            existing_admin.username = admin_username
+            existing_admin.password = generate_password_hash(
+                admin_password
+            )
+
+            print(
+                f"Admin credentials updated: {admin_username}"
+            )
+
+        else:
 
             new_admin = Admin(
                 username=admin_username,
@@ -1247,18 +1258,33 @@ def admin_login():
         username = request.form.get("username", "").strip()
         password = request.form.get("password", "")
 
-        admin = Admin.query.filter_by(username=username).first()
+        admin = Admin.query.filter_by(
+            username=username
+        ).first()
 
-        if admin and admin.password == password:
+        # Passwords are stored as secure hashes, so use
+        # check_password_hash() instead of comparing text.
+        if admin and check_password_hash(
+            admin.password,
+            password
+        ):
 
             session["admin_logged_in"] = True
             session["admin_username"] = admin.username
+            session["admin_id"] = admin.id
 
-            return redirect(url_for("admin_dashboard"))
+            return redirect(
+                url_for("admin_dashboard")
+            )
 
-        flash("Invalid admin username or password.", "danger")
+        flash(
+            "Invalid admin username or password.",
+            "danger"
+        )
 
-    return render_template("admin_login.html")
+    return render_template(
+        "admin_login.html"
+    )
 
 # =========================================================
 # ADMIN LOGOUT
