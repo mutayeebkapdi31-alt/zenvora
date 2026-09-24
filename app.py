@@ -1239,55 +1239,26 @@ def profile():
 # ADMIN LOGIN
 # =========================================================
 
-@app.route(
-    "/admin/login",
-    methods=["GET", "POST"]
-)
+@app.route("/admin/login", methods=["GET", "POST"])
 def admin_login():
 
     if request.method == "POST":
 
-        username = request.form.get(
-            "username",
-            ""
-        ).strip()
+        username = request.form.get("username", "").strip()
+        password = request.form.get("password", "")
 
-        password = request.form.get(
-            "password",
-            ""
-        )
+        admin = Admin.query.filter_by(username=username).first()
 
-        admin = Admin.query.filter_by(
-            username=username
-        ).first()
-
-        if admin and check_password_hash(
-            admin.password,
-            password
-        ):
+        if admin and admin.password == password:
 
             session["admin_logged_in"] = True
-            session["admin_id"] = admin.id
             session["admin_username"] = admin.username
 
-            flash(
-                "Admin login successful.",
-                "success"
-            )
+            return redirect(url_for("admin_dashboard"))
 
-            return redirect(
-                url_for("admin_dashboard")
-            )
+        flash("Invalid admin username or password.", "danger")
 
-        flash(
-            "Invalid admin username or password.",
-            "danger"
-        )
-
-    return render_template(
-        "admin/login.html"
-    )
-
+    return render_template("admin_login.html")
 
 # =========================================================
 # ADMIN LOGOUT
