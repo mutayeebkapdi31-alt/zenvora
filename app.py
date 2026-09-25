@@ -687,14 +687,38 @@ def login():
             ""
         )
 
-        user = User.query.filter_by(
-            email=email
-        ).first()
+        # Find the account safely.  Login must never crash the whole page
+        # because an older account contains an invalid/legacy password hash.
+        try:
+            user = User.query.filter_by(
+                email=email
+            ).first()
+        except Exception:
+            db.session.rollback()
+            flash(
+                "Unable to access the user database. Please try again.",
+                "danger"
+            )
+            return render_template("login.html")
 
-        if user and check_password_hash(
-            user.password,
-            password
-        ):
+        password_valid = False
+
+        if user:
+            try:
+                password_valid = check_password_hash(
+                    user.password or "",
+                    password
+                )
+            except (ValueError, TypeError):
+                # Support an old account that may have been stored before
+                # password hashing was enabled.  If the legacy password is
+                # correct, immediately replace it with a secure hash.
+                if user.password == password:
+                    user.password = generate_password_hash(password)
+                    db.session.commit()
+                    password_valid = True
+
+        if user and password_valid:
 
             session["user_id"] = user.id
             session["user_name"] = user.name
