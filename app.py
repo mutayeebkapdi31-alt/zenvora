@@ -374,13 +374,14 @@ def create_database():
         # CREATE DEFAULT ADMIN
         # -------------------------------------------------
 
-        # Fixed default admin credentials for Zenvora
-        # Username: admin
-        # Password: admin123
-        admin_username = "admin"
-        admin_password = "admin123"
+        # Admin credentials
+        # Render can override these with environment variables.
+        admin_username = os.environ.get("ADMIN_USERNAME", "admin")
+        admin_password = os.environ.get("ADMIN_PASSWORD", "admin123")
 
-        existing_admin = Admin.query.first()
+        existing_admin = Admin.query.filter_by(
+            username=admin_username
+        ).first()
 
         if existing_admin:
 
@@ -1815,48 +1816,8 @@ def inject_global_data():
 # CREATE DATABASE
 # =========================================================
 
-# -------------------------------------------------
-# CREATE / UPDATE DEFAULT ADMIN
-# -------------------------------------------------
+create_database()
 
-admin_username = os.environ.get(
-    "ADMIN_USERNAME",
-    "admin"
-)
-
-admin_password = os.environ.get(
-    "ADMIN_PASSWORD",
-    "admin123"
-)
-
-existing_admin = Admin.query.filter_by(
-    username=admin_username
-).first()
-
-if existing_admin:
-
-    existing_admin.password = generate_password_hash(
-        admin_password
-    )
-
-    print(
-        f"Admin credentials updated: {admin_username}"
-    )
-
-else:
-
-    new_admin = Admin(
-        username=admin_username,
-        password=generate_password_hash(
-            admin_password
-        )
-    )
-
-    db.session.add(new_admin)
-
-    print(
-        f"Admin created: {admin_username}"
-    )
 
 # =========================================================
 # RUN APPLICATION
