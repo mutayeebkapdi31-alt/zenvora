@@ -1241,7 +1241,6 @@ def profile():
         inquiries=inquiries
     )
 
-
 # =========================================================
 # ADMIN LOGIN
 # =========================================================
@@ -1251,10 +1250,15 @@ def admin_login():
 
     if request.method == "POST":
 
-        username = request.form.get("username", "").strip()
-        password = request.form.get("password", "").strip()
+        username = request.form.get(
+            "username",
+            ""
+        ).strip()
 
-        print("ADMIN LOGIN ATTEMPT:", username)
+        password = request.form.get(
+            "password",
+            ""
+        )
 
         admin = Admin.query.filter_by(
             username=username
@@ -1267,7 +1271,6 @@ def admin_login():
 
             session["admin_logged_in"] = True
             session["admin_username"] = admin.username
-            session["admin_id"] = admin.id
 
             return redirect(
                 url_for("admin_dashboard")
@@ -1812,8 +1815,48 @@ def inject_global_data():
 # CREATE DATABASE
 # =========================================================
 
-create_database()
+# -------------------------------------------------
+# CREATE / UPDATE DEFAULT ADMIN
+# -------------------------------------------------
 
+admin_username = os.environ.get(
+    "ADMIN_USERNAME",
+    "admin"
+)
+
+admin_password = os.environ.get(
+    "ADMIN_PASSWORD",
+    "admin123"
+)
+
+existing_admin = Admin.query.filter_by(
+    username=admin_username
+).first()
+
+if existing_admin:
+
+    existing_admin.password = generate_password_hash(
+        admin_password
+    )
+
+    print(
+        f"Admin credentials updated: {admin_username}"
+    )
+
+else:
+
+    new_admin = Admin(
+        username=admin_username,
+        password=generate_password_hash(
+            admin_password
+        )
+    )
+
+    db.session.add(new_admin)
+
+    print(
+        f"Admin created: {admin_username}"
+    )
 
 # =========================================================
 # RUN APPLICATION
