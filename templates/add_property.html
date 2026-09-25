@@ -1,0 +1,316 @@
+{% extends "base.html" %}
+
+{% block title %}Add Property - Zenvora{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-9">
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-header bg-dark text-white p-4">
+
+                    <h3 class="mb-1 fw-bold">
+                        Add New Property
+                    </h3>
+
+                    <p class="mb-0 opacity-75">
+                        Add a property to the Zenvora listings.
+                    </p>
+
+                </div>
+
+
+                <div class="card-body p-4 p-md-5">
+
+                    <form method="POST">
+
+
+                        <!-- TITLE -->
+
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+                                Property Title *
+                            </label>
+
+                            <input
+                                type="text"
+                                name="title"
+                                class="form-control"
+                                placeholder="Example: Azure Heights"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- CATEGORY + PURPOSE -->
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-4">
+
+                                <label class="form-label fw-semibold">
+                                    Category *
+                                </label>
+
+                                <select
+                                    name="category"
+                                    class="form-select"
+                                    required
+                                >
+
+                                    <option value="">
+                                        Select Category
+                                    </option>
+
+                                    <option value="Apartment">
+                                        Apartment
+                                    </option>
+
+                                    <option value="Villa">
+                                        Villa
+                                    </option>
+
+                                    <option value="Penthouse">
+                                        Penthouse
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="col-md-6 mb-4">
+
+                                <label class="form-label fw-semibold">
+                                    Purpose *
+                                </label>
+
+                                <select
+                                    name="purpose"
+                                    class="form-select"
+                                    required
+                                >
+
+                                    <option value="">
+                                        Select Purpose
+                                    </option>
+
+                                    <option value="Rent">
+                                        Rent
+                                    </option>
+
+                                    <option value="Buy">
+                                        Buy
+                                    </option>
+
+                                    <option value="Lease">
+                                        Lease
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- LOCATION -->
+
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+                                Location *
+                            </label>
+
+                            <input
+                                type="text"
+                                name="location"
+                                class="form-control"
+                                placeholder="Example: Kharghar, Navi Mumbai"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- PRICE -->
+
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+                                Price *
+                            </label>
+
+                            <input
+                                type="number"
+                                name="price"
+                                class="form-control"
+                                placeholder="Example: 8500000"
+                                min="0"
+                                step="0.01"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- BEDROOMS / BATHROOMS / AREA -->
+
+                        <div class="row">
+
+                            <div class="col-md-4 mb-4">
+
+                                <label class="form-label fw-semibold">
+                                    Bedrooms
+                                </label>
+
+                                <input
+                                    type="number"
+                                    name="bedrooms"
+                                    class="form-control"
+                                    value="0"
+                                    min="0"
+                                >
+
+                            </div>
+
+
+                            <div class="col-md-4 mb-4">
+
+                                <label class="form-label fw-semibold">
+                                    Bathrooms
+                                </label>
+
+                                <input
+                                    type="number"
+                                    name="bathrooms"
+                                    class="form-control"
+                                    value="0"
+                                    min="0"
+                                >
+
+                            </div>
+
+
+                            <div class="col-md-4 mb-4">
+
+                                <label class="form-label fw-semibold">
+                                    Area (sq ft)
+                                </label>
+
+                                <input
+                                    type="number"
+                                    name="area"
+                                    class="form-control"
+                                    value="0"
+                                    min="0"
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- IMAGE -->
+
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+                                Image URL
+                            </label>
+
+                            <input
+                                type="url"
+                                name="image"
+                                class="form-control"
+                                placeholder="https://..."
+                            >
+
+                            <div class="form-text">
+                                Leave empty to use the default property image.
+                            </div>
+
+                        </div>
+
+
+                        <!-- DESCRIPTION -->
+
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+                                Description
+                            </label>
+
+                            <textarea
+                                name="description"
+                                class="form-control"
+                                rows="5"
+                                placeholder="Describe the property..."
+                            ></textarea>
+
+                        </div>
+
+
+                        <!-- FEATURED -->
+
+                        <div class="form-check mb-4">
+
+                            <input
+                                class="form-check-input"
+                                type="checkbox"
+                                name="featured"
+                                id="featured"
+                            >
+
+                            <label
+                                class="form-check-label"
+                                for="featured"
+                            >
+                                Mark this property as featured
+                            </label>
+
+                        </div>
+
+
+                        <!-- BUTTONS -->
+
+                        <div class="d-flex gap-2">
+
+                            <button
+                                type="submit"
+                                class="btn btn-dark px-4"
+                            >
+                                Add Property
+                            </button>
+
+
+                            <a
+                                href="{{ url_for('admin_dashboard') }}"
+                                class="btn btn-outline-secondary px-4"
+                            >
+                                Cancel
+                            </a>
+
+                        </div>
+
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

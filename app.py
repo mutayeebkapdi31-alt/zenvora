@@ -374,15 +374,11 @@ def create_database():
         # CREATE DEFAULT ADMIN
         # -------------------------------------------------
 
-        admin_username = os.environ.get(
-            "ADMIN_USERNAME",
-            "admin"
-        )
-
-        admin_password = os.environ.get(
-            "ADMIN_PASSWORD",
-            "admin123"
-        )
+        # Fixed default admin credentials for Zenvora
+        # Username: admin
+        # Password: admin123
+        admin_username = "admin"
+        admin_password = "admin123"
 
         existing_admin = Admin.query.first()
 
@@ -1256,14 +1252,14 @@ def admin_login():
     if request.method == "POST":
 
         username = request.form.get("username", "").strip()
-        password = request.form.get("password", "")
+        password = request.form.get("password", "").strip()
+
+        print("ADMIN LOGIN ATTEMPT:", username)
 
         admin = Admin.query.filter_by(
             username=username
         ).first()
 
-        # Passwords are stored as secure hashes, so use
-        # check_password_hash() instead of comparing text.
         if admin and check_password_hash(
             admin.password,
             password
@@ -1362,7 +1358,7 @@ def admin_dashboard():
     ).scalar()
 
     return render_template(
-        "admin/dashboard.html",
+        "admin_dashboard.html",
         users=users,
         properties=properties,
         inquiries=inquiries,
@@ -1451,7 +1447,7 @@ def admin_add_property():
             )
 
             return render_template(
-                "admin/add_property.html"
+                "add_property.html"
             )
 
         try:
@@ -1469,7 +1465,7 @@ def admin_add_property():
             )
 
             return render_template(
-                "admin/add_property.html"
+                "add_property.html"
             )
 
         new_property = Property(
@@ -1507,7 +1503,7 @@ def admin_add_property():
         )
 
     return render_template(
-        "admin/add_property.html"
+        "add_property.html"
     )
 
 
